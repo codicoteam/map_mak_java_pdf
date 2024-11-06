@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<style>
+    :root {
+        --font-color: black;
+        --highlight-color: #60D0E4;
+        --header-bg-color: #1a1b52;
+        --footer-bg-color: #BFC0C3;
+        --table-row-separator-color: #BFC0C3;
+    }
+
+@page {
+    size: 8.5in 11in; /* Equivalent to US Letter size */
+    margin: 1cm 0;
+    @top-left {
+        content: element(header);
+    }
+    @bottom-left {
+        content: element(footer);
+    }
+}
+
+    body {
+        margin: 0;
+        padding: 1cm 2cm;
+        color: black;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10pt;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    hr {
+        margin: 1cm 0;
+        height: 0;
+        border: 0;
+        border-top: 1mm solid #60D0E4;
+    }
+
+    header {
+        height: 3cm;
+        padding: 0.5cm 0.3cm;
+        background-color: #1a1b52;
+    }
+
+    .headerSection {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .headerSection .logoAndName {
+        display: flex;
+        align-items: center;
+    }
+
+    .logoAndName img {
+        width: 5cm;
+        height: 2cm;
+        margin-right: .5cm;
+        border-radius: 50%;
+    }
+
+    .headerSection h1, .headerSection h2, .headerSection p {
+        color: white;
+        margin: 0;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .issuedTo h3 {
+        color: #60D0E4;
+        margin: 0 .75cm 0 0;
+    }
+
+    main table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    main table thead th {
+        height: 1cm;
+        color: #60D0E4;
+    }
+
+    main table tbody td {
+        padding: 4mm 0;
+        border-bottom: 0.5mm solid #BFC0C3;
+    }
+
+    main table th {
+        text-align: left;
+    }
+
+    main table td:last-of-type {
+        text-align: right;
+    }
+
+    main table.summary {
+        width: 100%;
+        margin-left: 12cm;
+        margin-top: .5cm;
+    }
+
+    main table.summary tr.total {
+        font-weight: bold;
+        background-color: #1a1b52;
+
+        color: white;
+    }
+
+    main table.summary td, main table.summary th {
+        padding: 4mm 0.3cm;
+        color: black;
+    }
+    aside {
+     position: absolute;
+     bottom: 0;
+     padding: 0 0cm .5cm 0cm;
+ }
+
+    aside hr {
+        width: 50%;
+        margin-top: 1cm;
+    }
+    footer {
+        height: 2cm;
+        padding: 0.2cm 2cm;
+        position: running(footer);
+        background-color: #BFC0C3;
+        font-size: 8pt;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    footer a:first-child {
+        font-weight: bold;
+    }
+</style>
+
+<header>
+    <div class="headerSection" style="display: flex; justify-content: space-between; padding: 10px;">
+        <div class="logoAndName" style="display: flex; align-items: left; float: left">
+            <img src="https://firebasestorage.googleapis.com/v0/b/eezimeds-6324a.appspot.com/o/mapkmaklog.jpg?alt=media&token=d4fd3089-b53c-4e0b-abd7-5aded520153e" alt="Logo" style="width: 2cm; height: 2cm; margin-right: .5cm; border-radius: 50%; float: left" />
+            <div style="float: right">
+                <h1 style="color: white; margin: 0;">MapMak Furnitures</h1>
+            </div>
+        </div>
+        <div style="float: right; display: flex;">
+            <h2 style="color: white; margin: 0;"> <span th:text="${request.documentType}"></span> Document</h2>
+            <p style="color: white; margin: 0;">
+                <b>Date:</b> <span th:text="${request.dateNow}"></span>
+            </p>
+            <p style="color: white; margin: 0;">
+                <b>Quotation ID:</b> <span th:text="${request.id}"></span>
+            </p>
+            <p style="color: white">Issued  to: <span th:text="${request.customerName}"></span> </p>
+            <p>
+                <span th:text="${request.customerAddress}"></span><br>
+                <a th:href="'mailto:' + ${request.customerEmail}" th:text="${request.customerEmail}"></a><br>
+            </p>
+        </div>
+    </div>
+</header>
+
+<footer>
+    <a href="https://mapmakfurnitures.co.zw">mapmakfurnitures.co.zw</a>
+    <a href="mailto:admin@mapmakfurnitures.co.zw">admin@mapmakfurnitures.co.zw</a>
+    <span>+263 78 089 7191 / +263 78 864 7705</span>
+    <span>Office No. 317 Construction House Harare Zimbabwe</span>
+</footer>
+
+<main>
+    <table>
+        <thead>
+        <tr>
+            <th><span th:text="${request.documentType}"></span> Items</th>
+            <th>Amount</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="furniture : ${request.furnitureBought}">
+            <td><b th:text="${furniture.name}"></b><br th:text="${furniture.description}"></td>
+            <td th:text="${furniture.quantity}"></td>
+            <td th:text="${furniture.productPrice}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="summary">
+        <tr>
+            <th>Subtotal</th>
+            <td>$ <span th:text="${request.expectedBudget}"></span></td>
+        </tr>
+        <tr>
+            <th>Tax 0.0%</th>
+            <td>$0.00</td>
+        </tr>
+        <tr class="total" >
+            <th style="color: white">Total</th>
+            <td style="color: white">$ <span th:text="${request.expectedBudget}"></span></td>
+        </tr>
+    </table>
+    <h3>More Details</h3>
+    <p th:text="${request.message}"></p>
+</main>
+<aside>
+    <b>Terms &amp; Conditions</b>
+    <p th:text="${request.termsAndCondition}"></p>
+</aside>
+</html>

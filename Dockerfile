@@ -27,7 +27,7 @@ WORKDIR /app
 COPY --from=build /app/target/pdf-maker-0.0.1-SNAPSHOT.jar pdf-maker.jar
 
 # Step 10: Expose the port the app will run on
-EXPOSE 8080
+EXPOSE 8082
 
 # Step 11: Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "/app/pdf-maker.jar"]
